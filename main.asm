@@ -1,4 +1,4 @@
-.include "m328Pdef.inc"   ; Используем ATMega16
+.include "m328Pdef.inc"   ; РСЃРїРѕР»СЊР·СѓРµРј ATMega16
 
 .def tmpI = R20
 .def delay = R21
@@ -20,7 +20,7 @@
 			JMP		Watchdog 
 			.ORG	ADCCaddr	 ; (ADC)
 			JMP		ADC_conversion
-	 		.ORG	INT_VECTORS_SIZE      	; Конец таблицы прерываний
+	 		.ORG	INT_VECTORS_SIZE      	; РљРѕРЅРµС† С‚Р°Р±Р»РёС†С‹ РїСЂРµСЂС‹РІР°РЅРёР№
 
 ; Interrupts ==============================================
 EXT_INT0:	CLI
@@ -61,10 +61,10 @@ Watchdog:
 
 			;start adc
 			LDS		tmpI, ADMUX
-			ORI		tmpI, 1 << REFS0 | 0 << ADLAR | 1 << MUX2; выставляю AVCC with external capacitor at AREF pin. Также 4 канал.
+			ORI		tmpI, 1 << REFS0 | 0 << ADLAR | 1 << MUX2; РІС‹СЃС‚Р°РІР»СЏСЋ AVCC with external capacitor at AREF pin. РўР°РєР¶Рµ 4 РєР°РЅР°Р».
 			STS		ADMUX, tmpI
 			LDS		tmpI, ADCSRA
-			ORI		tmpI, 1 << ADEN | 1 << ADSC | 1 << ADIF | 1 << ADIE | 1 << ADPS2 | 1 << ADPS1 ; включаю и настраиваю
+			ORI		tmpI, 1 << ADEN | 1 << ADSC | 1 << ADIF | 1 << ADIE | 1 << ADPS2 | 1 << ADPS1 ; РІРєР»СЋС‡Р°СЋ Рё РЅР°СЃС‚СЂР°РёРІР°СЋ
 			STS		ADCSRA, tmpI
 
 			SEI
@@ -74,26 +74,26 @@ Watchdog:
 ; End Interrupts ==========================================
 
 
-Reset:   	;Инициализация стека
+Reset:   	;РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ СЃС‚РµРєР°
 			LDI 	R16,Low(RAMEND)	
 		    OUT 	SPL,R16			
 			
 		 	LDI 	R16,High(RAMEND)
 		 	OUT 	SPH,R16
 			;---
-			;Настройка прерывания по INT0 (pin2, pin3)
+			;РќР°СЃС‚СЂРѕР№РєР° РїСЂРµСЂС‹РІР°РЅРёСЏ РїРѕ INT0 (pin2, pin3)
 			LDI		R16, 1 << ISC01 | 1 << ISC00 | 1 << ISC11 | 1 << ISC10	;The rising edge of INT0 generates an interrupt request
 			STS		EICRA, R16
 	
 			LDI		R16, 1 << INT0 | 1 << INT1
 			OUT		EIMSK, R16
 			;---
-			;Настройка ADC
+			;РќР°СЃС‚СЂРѕР№РєР° ADC
 			LDS		R16, ADMUX
-			ORI		R16, 1 << REFS0 ; Выставляю AVCC with external capacitor at AREF pin. Также 0 канал.  ????? 0 или 1???? что лучше
+			ORI		R16, 1 << REFS0 ; Р’С‹СЃС‚Р°РІР»СЏСЋ AVCC with external capacitor at AREF pin. РўР°РєР¶Рµ 0 РєР°РЅР°Р».  ????? 0 РёР»Рё 1???? С‡С‚Рѕ Р»СѓС‡С€Рµ
 			STS		ADMUX, R16
 			LDS		R16, ADCSRA
-			ORI		R16, 1 << ADEN | 1 << ADSC | 1 << ADIF | 1 << ADIE | 1 << ADPS2 | 1 << ADPS1 ; включаю и настраиваю
+			ORI		R16, 1 << ADEN | 1 << ADSC | 1 << ADIF | 1 << ADIE | 1 << ADPS2 | 1 << ADPS1 ; РІРєР»СЋС‡Р°СЋ Рё РЅР°СЃС‚СЂР°РёРІР°СЋ
 			STS		ADCSRA, R16
 			;---
 
@@ -193,4 +193,4 @@ Vix:
 
 
 ; EEPROM =====================================================
-			.ESEG				; Сегмент EEPROM
+			.ESEG				; РЎРµРіРјРµРЅС‚ EEPROM
